@@ -1,0 +1,153 @@
+﻿@using RecipeBizObjects
+
+
+@model RecipeBizObjects.bizRecipe
+
+
+@{
+    ViewData["Title"] = "Recipe Details";
+    
+}
+<div class = "text-center">
+    <h1 class ="text-success">Recipe Details</h1>
+    <h2 class ="text-success">@Html.DisplayFor(model => model.RecipeName)</h2>
+      
+     <hr />
+</div>
+
+<div class= "container">
+<div class= "text-bg-light border border-5 border-danger">
+     
+   
+  
+    <dl class="row ">
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.RecipeName)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.RecipeName)
+        </dd>
+             <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.CreatedByUserId)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.UserFullName)
+        </dd>
+             <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.CuisineTypeId)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.CuisineTypeName)
+        </dd>
+             <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.DateDrafted)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.DateDrafted)
+        </dd>
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.DatePublished)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.DatePublished)
+        </dd>
+  
+   
+   
+   
+        </dl>
+        <dl class ="row">
+                  <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.DateArchived)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.DateArchived)
+        </dd>
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.RecipeStatus)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.RecipeStatus)
+        </dd>
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.NumberOfIngredients)
+        </dt>
+        <dd class ="col-md-1">
+            @Html.DisplayFor(model => model.NumberOfIngredients)
+        </dd>
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.Calories)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.Calories)
+        </dd>
+        <dt class = "col-md-1">
+            @Html.DisplayNameFor(model => model.NumberOfSteps)
+        </dt>
+        <dd class = "col-md-1">
+            @Html.DisplayFor(model => model.NumberOfSteps)
+        </dd>
+
+ 
+    </dl>
+    <dl>
+            <div class = "row">
+                <div class = "col-md-6">
+
+             <h6>Ingredients:</h6>
+        <ul>
+        @foreach(bizRecipeIngredient i in Model.RecipeIngredientList())
+        {
+              <li>
+                @i.IngredientDesc
+            </li>
+        }
+          
+        </ul>
+     
+        <h6>Directions:</h6>
+        <div class = "col-md-6">
+         <ol>
+        @foreach(bizSteps s in Model.StepsList())
+        {
+              <li>
+                @s.StepDesc
+            </li>
+        }
+          
+       </ol>
+         </div>
+           </dl>
+           </div>
+         </div>
+       
+         <style>
+        body{
+            background-image:url("/images/Recipe pics/@(Model.RecipeName).jpg");
+            height:100%;
+            background-position:bottom;
+            background-repeat:no-repeat;
+            background-size:cover;
+            
+          
+        }
+    </style>
+@*<div class ="text-center">
+     <h3><img src="/images/Recipe pics/@(Model.RecipeName).jpg" width=600></h3>
+</div>*@
+   
+<div class = "row">
+           <div class ="col-md-1">
+        @Html.ActionLink("Delete","Delete",new{id=Model.Code},new{Class = "btn btn-danger"})
+    </div>
+   
+    <div class ="col-md-1">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Code},new{Class = "btn btn-danger"})
+</div>
+@*    <div class ="col-md-2">
+    @Html.ActionLink("New Recipe", "Edit", new { id = ""},new{Class = "btn btn-primary"}) |
+    <a asp-action="Index">Back to List</a>
+</div>*@
+ </div>
+
+

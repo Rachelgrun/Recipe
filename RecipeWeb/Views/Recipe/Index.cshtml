@@ -1,0 +1,43 @@
+﻿@using RecipeBizObjects
+@model List<bizRecipe>
+
+    <div class="row">
+    <div class="col-md-12 text-center">
+       <h1>Discover many different kinds of recipes!!</h1>
+
+      <h2>There are currently @Model.Count() recipes available.</h2>
+
+      <h3>Click on a Recipe you would like to see more about</h3>
+    </div>
+</div>
+<div class ="container-fluid">
+<div class="row">
+    <div class ="col-md-6">
+       <table class ="table table-responsive table-light border border-5 border-dark table-success">
+            <thead>
+                <tr>
+                    <th>Picture</th>
+                       <th>Recipe Name</th>
+                       <th>Calorie Count</th>
+                       <th>Number Of Ingredients</th>
+                       <th>Number Of Steps</th>
+                </tr>
+             
+            </thead>
+            @foreach(bizRecipe r in Model)
+            {
+              <tr>
+              <td><img src="/images/Recipe pics/@(r.RecipeName).jpg" width=100></td>
+              <td>@Html.ActionLink(r.RecipeName.ToString(),"RecipeDetails",new{id = r.Code})</td>  
+              <td>@r.Calories</td>
+              <td>@r.NumberOfIngredients</td>
+              <td>@r.NumberOfSteps</td>
+            </tr>
+            }
+     
+        </table>
+    </div>
+</div>
+</div>
+
+

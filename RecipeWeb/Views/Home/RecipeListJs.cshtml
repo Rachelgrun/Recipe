@@ -1,0 +1,235 @@
+﻿<div class="row">
+
+    <div class="col-md-12">
+
+        <h2 class="text-primary">Recipes</h2>
+
+    </div>
+
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-success" onclick="RefreshList()">Refresh List</button>
+        <button class="btn btn-primary" onclick="ShowAll()">Show All</button>
+        <button class="btn btn-danger" onclick="HideAll()">Hide All</button>
+
+    </div>
+
+</div>
+<hr />
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <table class="table" id="tblrecipe">
+        </table>
+
+    </div>
+
+    <div class="col-md-8">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="row" id="dvPeek" onclick="ClearPeek()">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="row" id="dvAddToMeal">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+
+    const tblrecipe = document.getElementById("tblrecipe");
+
+    const dvPeek = document.getElementById("dvPeek");
+
+    const dvAddToMeal = document.getElementById("dvAddToMeal");
+
+
+
+    let recipearray = [];
+
+
+    RefreshList();
+
+
+    function ShowrecipeList(json_array) {
+
+    recipearray = json_array;
+   tblrecipe.replaceChildren();
+
+    json_array.forEach(p => CreaterecipeRow(p));
+
+    }
+
+
+
+    function CreaterecipeRow(recipe) {
+
+    const r = document.createElement("tr");
+
+    let td = document.createElement("td");
+
+    td.innerHTML = `<a href='/Recipe/RecipeDetails/${recipe.code}'>${recipe.recipeName}</a>`;
+
+    r.appendChild(td);
+
+
+
+    td = document.createElement("td");
+
+    td.innerHTML = GetShowButton(recipe, true);
+
+    r.appendChild(td);
+
+
+
+    td = document.createElement("td");
+
+    td.innerHTML = GetShowButton(recipe, false);
+
+    r.appendChild(td);
+
+
+
+    tblrecipe.appendChild(r);
+
+    }
+
+    
+
+    function CreaterecipeCard(recipe, peek) {
+
+    const dv = peek ? dvPeek : dvAddToMeal;
+
+    let card = `
+
+    <div id="${peek ? "" : GetCardId(recipe.code)}" class="col-md-4">
+
+    <div class="card">
+
+    ${peek ? "" : `<div class="card-header d-flex justify-content-end pe-1"><button onclick=HideCard('${recipe.code}') class="btn btn-danger">X</button></div>`}
+
+    <img class="card-img-top" src="/images/Recipe pics/${recipe.recipeName}.jpg" alt="Card image">
+
+    <div class="card-body">
+
+    <h4 class="card-title">${recipe.recipeName}</h4>
+
+    <p class="card-text">${recipe.calories + " Calories"}</p>
+
+    <a href="/Recipe/RecipeDetails/${recipe.code}" class="btn btn-primary">See Profile</a>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    `
+
+    if (peek) {
+
+    dv.innerHTML = card;
+
+    }
+
+    else {
+        console.log(GetCardId(recipe.code))
+    if (document.getElementById(recipe.code) != null) {
+
+        HideCard(GetCardId(recipe.code));
+
+    }
+
+    dv.innerHTML = card + dv.innerHTML;
+
+    }
+
+
+
+    }
+
+
+
+    function GetShowButton(recipe, peek) {
+
+    return `<button onclick='Showrecipe("${recipe.code}",${peek})' class='btn btn-primary bg-primary'>${peek ? "Peek" : "AddToMeal"}</button>`
+
+    }
+
+
+
+
+
+
+
+    function Showrecipe(code, peek) {
+
+    const recipe = recipearray.find(p => p.code == code);
+
+    CreaterecipeCard(recipe, peek);
+    window.scroll(0,0);
+
+    }
+
+
+
+    function HideCard(code) {
+        const id = GetCardId(code);
+    const card = document.getElementById(id);
+    dvAddToMeal.removeChild(card);
+
+
+
+    }
+
+    function RefreshList(){
+        
+    fetch("/recipe/APIRecipeList")
+
+    .then(resp => resp.json())
+
+    .then(json_array => ShowrecipeList(json_array));
+
+    }
+    function ShowAll(){
+       recipearray.forEach(p =>Showrecipe(p.code,false));
+    }
+    function HideAll(){
+        recipearray.forEach(p=> HideCard(p.code));
+    }
+    function ClearPeek(){
+        dvPeek.replaceChildren();
+    }
+
+    function GetCardId(code) {
+
+    return "card-" + code;
+
+    }
+
+</script>
